@@ -1,0 +1,20 @@
+[project]
+name = "building-extraction"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = [
+    "geoai-py",
+    "jupyter",
+    "pandas",
+    "rasterio",
+    "torch>=2.13.0",
+]
+
+[project.scripts]
+building-extraction = "building_extraction:main"
+
+[build-system]
+requires = ["uv_build>=0.11.15,<0.12.0"]
+build-backend = "uv_build"
