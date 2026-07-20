@@ -51,10 +51,10 @@ from tqdm import tqdm
 # ----------------------------------------------------------------------------
 CONFIG = {
     # ---- paths ----
-    "train_tiles_dir":  "data/train_tiles",        # 36 GeoTIFFs, 5000x5000, 4 bands
-    "footprints_shp":   "data/footprints/buildings.shp",
-    "infer_tiles_dir":  "data/infer_tiles",        # 10 GeoTIFFs for inference
-    "work_dir":         "work",                    # masks, chips, checkpoints, outputs
+    "train_tiles_dir":  "F:\CustomCNN\Train",        # 36 GeoTIFFs, 5000x5000, 4 bands
+    "footprints_shp":   "F:\CustomCNN\IndyMapShapefile/buildings.shp",
+    "infer_tiles_dir":  "F:\CustomCNN\Test",        # 10 GeoTIFFs for inference
+    "work_dir":         "F:\CustomCNN\Results",                    # masks, chips, checkpoints, outputs
 
     # ---- data prep ----
     "patch_size":       512,
@@ -73,7 +73,7 @@ CONFIG = {
     "in_channels":      4,
 
     # ---- training ----
-    "epochs":           40,
+    "epochs":           20,
     "batch_size":       8,
     "lr":               1e-4,
     "weight_decay":     1e-4,

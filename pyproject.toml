@@ -7,6 +7,7 @@ requires-python = ">=3.14"
 dependencies = [
     "geoai-py",
     "jupyter",
+    "numpy>=2.5.1",
     "pandas",
     "rasterio",
     "torch>=2.13.0",
