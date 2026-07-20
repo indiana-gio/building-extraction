@@ -51,10 +51,10 @@ from tqdm import tqdm
 # ----------------------------------------------------------------------------
 CONFIG = {
     # ---- paths ----
-    "train_tiles_dir":  "F:\CustomCNN\Train",        # 36 GeoTIFFs, 5000x5000, 4 bands
-    "footprints_shp":   "F:\CustomCNN\IndyMapShapefile/buildings.shp",
-    "infer_tiles_dir":  "F:\CustomCNN\Test",        # 10 GeoTIFFs for inference
-    "work_dir":         "F:\CustomCNN\Results",                    # masks, chips, checkpoints, outputs
+    "train_tiles_dir":  r"F:\CustomCNN\Train",        # 36 GeoTIFFs, 5000x5000, 4 bands
+    "footprints_shp":   r"F:\CustomCNN\IndyMapShapefile\buildings.shp",
+    "infer_tiles_dir":  r"F:\CustomCNN\Test",        # 10 GeoTIFFs for inference
+    "work_dir":         r"F:\CustomCNN\Results",                    # masks, chips, checkpoints, outputs
 
     # ---- data prep ----
     "patch_size":       512,
@@ -111,6 +111,27 @@ for d in (MASK_DIR, CHIP_IMG_DIR, CHIP_MSK_DIR, CKPT_DIR, PRED_DIR):
 
 def list_tiles(folder):
     return sorted(glob.glob(os.path.join(folder, "*.tif")))
+
+
+def resolve_footprints_path():
+    cfg_path = Path(CONFIG["footprints_shp"])
+    if cfg_path.is_file():
+        return str(cfg_path)
+
+    if cfg_path.is_dir():
+        candidates = sorted(cfg_path.glob("*.shp"))
+        if not candidates:
+            raise FileNotFoundError(f"No .shp shapefile found in {cfg_path}")
+        return str(candidates[0])
+
+    parent = cfg_path.parent
+    if parent.exists():
+        candidates = sorted(parent.glob("*.shp"))
+        if candidates:
+            print(f"Configured footprints path missing; using discovered shapefile: {candidates[0]}")
+            return str(candidates[0])
+
+    raise FileNotFoundError(f"Footprint shapefile not found: {cfg_path}")
 
 
 # ============================================================================
@@ -184,7 +205,8 @@ def stage_prepare():
     print(f"{len(train_tile_paths)} training tiles found")
 
     # --- load & clean footprints ---
-    gdf = gpd.read_file(CONFIG["footprints_shp"])
+    footprints_path = resolve_footprints_path()
+    gdf = gpd.read_file(footprints_path)
     print(f"{len(gdf)} footprint polygons | CRS: {gdf.crs}")
     gdf["geometry"] = gdf.geometry.buffer(0)  # fix invalid geometries
     gdf = gdf[~gdf.geometry.is_empty & gdf.geometry.notna()]
@@ -513,8 +535,9 @@ def stage_infer():
 def main():
     parser = argparse.ArgumentParser(
         description="U-Net building footprint extraction pipeline")
-    parser.add_argument("stage", choices=["prepare", "train", "infer", "all"],
-                        help="Pipeline stage to run")
+    parser.add_argument("stage", nargs="?", default="all",
+                        choices=["prepare", "train", "infer", "all"],
+                        help="Pipeline stage to run (default: all)")
     args = parser.parse_args()
 
     if args.stage in ("prepare", "all"):
