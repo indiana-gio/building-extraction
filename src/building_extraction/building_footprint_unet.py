@@ -54,15 +54,15 @@ print("Device:", DEVICE)
 
 CONFIG = {
     # ---- paths ----
-    "train_tiles_dir":  r"C:\Users\DiSharma\Desktop\Project\LocalMachineCodeTest\Train",        # 36 GeoTIFFs, 5000x5000, 4 bands
-    "footprints_shp":   r"C:\Users\DiSharma\Desktop\Project\IndyMapShapefile/IndyBuildingTrain.shp",
-    "infer_tiles_dir":  r"C:\Users\DiSharma\Desktop\Project\LocalMachineCodeTest\Test",        # 10 GeoTIFFs for inference
-    "work_dir":         r"C:\Users\DiSharma\Desktop\Project\LocalMachineCodeTest\Results",                    # masks, chips, checkpoints, outputs
+    "train_tiles_dir":  r"C:\Users\Administrator.EC2AMAZ-T6362Q1\Desktop\CustomCNN\Train",        # 36 GeoTIFFs, 5000x5000, 4 bands
+    "footprints_shp":   r"C:\Users\Administrator.EC2AMAZ-T6362Q1\Desktop\CustomCNN\IndyMapShapefile\IndyBuildingTrain.shp",
+    "infer_tiles_dir":  r"C:\Users\Administrator.EC2AMAZ-T6362Q1\Desktop\CustomCNN\Test",        # 10 GeoTIFFs for inference
+    "work_dir":         r"C:\Users\Administrator.EC2AMAZ-T6362Q1\Desktop\CustomCNN\Results",                    # masks, chips, checkpoints, outputs
 
     # ---- data prep ----
     "patch_size":       512,
     "train_stride":     384,     # overlap during chipping (512 - 384 = 128 px overlap)
-    "val_tile_frac":    0.25,    # ~6 of 36 tiles held out for validation (split by TILE)
+    "val_tile_frac":    0.20,    # ~6 of 36 tiles held out for validation (split by TILE)
     "keep_empty_frac":  0.15,    # keep this fraction of building-free patches as negatives
 
     # ---- normalization ----
@@ -71,12 +71,12 @@ CONFIG = {
     "band_stds":        None,
 
     # ---- model ----
-    "encoder":          "resnet34",   # try "resnet50" if you have GPU headroom
+    "encoder":          "resnet50",   # try "resnet50" if you have GPU headroom
     "encoder_weights":  "imagenet",   # smp adapts the first conv for 4 channels
     "in_channels":      4,
 
     # ---- training ----
-    "epochs":           2,
+    "epochs":           20,
     "batch_size":       8,
     "lr":               1e-4,
     "weight_decay":     1e-4,
@@ -266,7 +266,7 @@ val_dl   = DataLoader(val_ds, batch_size=CONFIG["batch_size"], shuffle=False,
                       num_workers=CONFIG["num_workers"], pin_memory=True)
 print(len(train_ds), "train |", len(val_ds), "val")
 
-"""## 5. Model — U-Net with ResNet-34 encoder
+"""## 5. Model — U-Net with ResNet-50 encoder
 
 `segmentation_models_pytorch` adapts the ImageNet-pretrained first conv to 4 input channels (the pretrained RGB weights are reused and the extra channel is initialized sensibly), which typically converges much faster than training from scratch.
 """
@@ -356,6 +356,7 @@ ax[0].set_title("Loss"); ax[0].legend()
 ax[1].plot([e["epoch"] for e in h], [e["val_iou"] for e in h], label="IoU")
 ax[1].plot([e["epoch"] for e in h], [e["val_f1"] for e in h], label="F1")
 ax[1].set_title("Validation metrics"); ax[1].legend()
+plt.savefig("matrics.png", dpi=300)
 plt.tight_layout(); plt.show()
 
 """## 7. Sanity check — visualize a few validation predictions"""
@@ -376,6 +377,8 @@ for row, i in enumerate(idxs):
     axes[row, 1].imshow(msk_t[0], cmap="gray");   axes[row, 1].set_title("Ground truth")
     axes[row, 2].imshow(prob > 0.5, cmap="gray"); axes[row, 2].set_title("Prediction")
     for a in axes[row]: a.axis("off")
+
+plt.savefig("example.png", dpi=300)    
 plt.tight_layout(); plt.show()
 
 """## 8. Inference on the 10 tiles — sliding window with overlap blending
