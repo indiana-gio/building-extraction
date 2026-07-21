@@ -73,7 +73,7 @@ CONFIG = {
     "in_channels":      4,
 
     # ---- training ----
-    "epochs":           20,
+    "epochs":           10,
     "batch_size":       8,
     "lr":               1e-4,
     "weight_decay":     1e-4,
@@ -422,8 +422,10 @@ def plot_history(history):
     ax[1].set_title("Validation metrics"); ax[1].legend()
     plt.tight_layout()
     out = WORK / "training_curves.png"
-    plt.savefig(out, dpi=150)
+    plt.savefig(out, dpi=300)
     print("Training curves saved to", out)
+
+
 
 
 # ============================================================================
