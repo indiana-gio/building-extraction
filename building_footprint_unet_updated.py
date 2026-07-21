@@ -51,10 +51,10 @@ from tqdm import tqdm
 # ----------------------------------------------------------------------------
 CONFIG = {
     # ---- paths ----
-    "train_tiles_dir":  r"F:\CustomCNN\Train",        # 36 GeoTIFFs, 5000x5000, 4 bands
-    "footprints_shp":   r"F:\CustomCNN\IndyMapShapefile\buildings.shp",
-    "infer_tiles_dir":  r"F:\CustomCNN\Test",        # 10 GeoTIFFs for inference
-    "work_dir":         r"F:\CustomCNN\Results",                    # masks, chips, checkpoints, outputs
+    "train_tiles_dir":  r"C:\Users\DiSharma\Desktop\Project\TrainingTiles\3in",        # 36 GeoTIFFs, 5000x5000, 4 bands
+    "footprints_shp":   r"C:\Users\DiSharma\Desktop\Project\IndyMapShapefile\IndyBuildingTrain.shp",
+    "infer_tiles_dir":  r"C:\Users\DiSharma\Desktop\Project\RawTiles10_3inch",        # 10 GeoTIFFs for inference
+    "work_dir":         r"C:\Users\DiSharma\Desktop\Project\CustomModel\Results",                    # masks, chips, checkpoints, outputs
 
     # ---- data prep ----
     "patch_size":       512,
