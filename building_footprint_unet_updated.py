@@ -50,7 +50,7 @@ from pathlib import Path
 # ----------------------------------------------------------------------------
 # Configuration
 # ----------------------------------------------------------------------------
-ROOT_DIR = Path("/home/ubuntu/code/Project")
+ROOT_DIR = Path("/opt/dlami/nvme/code/Project")
 
 CONFIG = {
     # ---- paths ----
