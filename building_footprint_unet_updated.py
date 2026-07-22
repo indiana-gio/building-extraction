@@ -493,6 +493,8 @@ def predict_tile(tile_path, model, band_means, band_stds):
         profile = src.profile.copy()
         img = src.read().astype(np.float32)  # (4,H,W) ~400 MB/tile, fits in RAM
 
+    band_means = band_means.astype(np.float32, copy=False)
+    band_stds = band_stds.astype(np.float32, copy=False)
     img = (img - band_means[:, None, None]) / band_stds[:, None, None]
 
     prob_acc = np.zeros((H, W), dtype=np.float32)
@@ -505,6 +507,7 @@ def predict_tile(tile_path, model, band_means, band_stds):
                   desc=Path(tile_path).stem, leave=False):
         batch_pos = positions[b:b + bs]
         batch = np.stack([img[:, y:y + patch, x:x + patch] for y, x in batch_pos])
+        batch = batch.astype(np.float32, copy=False)
         t = torch.from_numpy(batch).to(DEVICE)
         with torch.autocast(device_type="cuda",
                             enabled=CONFIG["amp"] and DEVICE == "cuda"):
@@ -563,10 +566,11 @@ def stage_infer():
     print(f"{len(infer_tile_paths)} inference tiles")
 
     ckpt = torch.load(CKPT_BEST, map_location=DEVICE)
-    band_means = np.array(ckpt["band_means"], dtype=np.float64)
-    band_stds = np.array(ckpt["band_stds"], dtype=np.float64)
+    band_means = np.array(ckpt["band_means"], dtype=np.float32)
+    band_stds = np.array(ckpt["band_stds"], dtype=np.float32)
     model = build_model()
     model.load_state_dict(ckpt["model"])
+    model = model.float()
     model.eval()
 
     for tp in infer_tile_paths:
