@@ -54,10 +54,10 @@ ROOT_DIR = Path("/home/ubuntu/code/Project")
 
 CONFIG = {
     # ---- paths ----
-    "train_tiles_dir":  ROOT_DIR / r"TrainingTiles\3in",        # 36 GeoTIFFs, 5000x5000, 4 bands
-    "footprints_shp":   ROOT_DIR / r"IndyMapShapefile\IndyBuildingTrain.shp",
+    "train_tiles_dir":  ROOT_DIR / r"TrainingTiles/3in",        # 36 GeoTIFFs, 5000x5000, 4 bands
+    "footprints_shp":   ROOT_DIR / r"IndyMapShapefile/IndyBuildingTrain.shp",
     "infer_tiles_dir":  ROOT_DIR / r"RawTiles10_3inch",        # 10 GeoTIFFs for inference
-    "work_dir":         ROOT_DIR / r"CustomModel\Results",                    # masks, chips, checkpoints, outputs
+    "work_dir":         ROOT_DIR / r"CustomModel/Results",                    # masks, chips, checkpoints, outputs
 
     # ---- data prep ----
     "patch_size":       512,
