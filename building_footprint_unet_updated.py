@@ -51,10 +51,10 @@ from tqdm import tqdm
 # ----------------------------------------------------------------------------
 CONFIG = {
     # ---- paths ----
-    "train_tiles_dir":  r"C:\Users\DiSharma\Desktop\Project\TrainingTiles\3in",        # 36 GeoTIFFs, 5000x5000, 4 bands
-    "footprints_shp":   r"C:\Users\DiSharma\Desktop\Project\IndyMapShapefile\IndyBuildingTrain.shp",
-    "infer_tiles_dir":  r"C:\Users\DiSharma\Desktop\Project\RawTiles10_3inch",        # 10 GeoTIFFs for inference
-    "work_dir":         r"C:\Users\DiSharma\Desktop\Project\CustomModel\Results",                    # masks, chips, checkpoints, outputs
+    "train_tiles_dir":  r"F:\UNet\Train",        # 36 GeoTIFFs, 5000x5000, 4 bands
+    "footprints_shp":   r"F:\UNet\Indy_Train_shapefile\IndyBuildingTrain.shp",
+    "infer_tiles_dir":  r"F:\UNet\Test",        # 10 GeoTIFFs for inference
+    "work_dir":         r"F:\UNet\Result",                    # masks, chips, checkpoints, outputs
 
     # ---- data prep ----
     "patch_size":       512,
@@ -73,7 +73,7 @@ CONFIG = {
     "in_channels":      4,
 
     # ---- training ----
-    "epochs":           10,
+    "epochs":           1,
     "batch_size":       8,
     "lr":               1e-4,
     "weight_decay":     1e-4,
@@ -425,7 +425,51 @@ def plot_history(history):
     plt.savefig(out, dpi=300)
     print("Training curves saved to", out)
 
+def save_random_validation_examples(model, records, band_means, band_stds, num_examples=4):
+    import matplotlib
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
 
+    val_records = [r for r in records if r["split"] == "val"]
+    selected = random.Random(SEED).sample(val_records, min(num_examples, len(val_records)))
+
+    examples = []
+    model.eval()
+    with torch.no_grad():
+        for r in selected:
+            img = np.load(CHIP_IMG_DIR / r["img"]).astype(np.float32)
+            msk = np.load(CHIP_MSK_DIR / r["msk"]).astype(np.uint8)
+
+            norm_img = (img - band_means[:, None, None]) / band_stds[:, None, None]
+            batch = torch.from_numpy(norm_img[None]).to(DEVICE)
+            logits = model(batch)
+            pred = (torch.sigmoid(logits)[0, 0] > 0.5).cpu().numpy().astype(np.uint8)
+
+            examples.append((img, msk, pred))
+
+    fig, axes = plt.subplots(len(examples), 3, figsize=(12, 3 * len(examples)))
+    if len(examples) == 1:
+        axes = np.expand_dims(axes, 0)
+
+    for i, (img, msk, pred) in enumerate(examples):
+        rgb = np.moveaxis(img[:3], 0, -1)
+        if rgb.max() > 1.0:
+            rgb = np.clip(rgb / 255.0, 0.0, 1.0)
+
+        axes[i, 0].imshow(rgb)
+        axes[i, 0].set_title("Image")
+        axes[i, 0].axis("off")
+
+        axes[i, 1].imshow(msk, cmap="gray", vmin=0, vmax=1)
+        axes[i, 1].set_title("Ground truth")
+        axes[i, 1].axis("off")
+
+        axes[i, 2].imshow(pred, cmap="gray", vmin=0, vmax=1)
+        axes[i, 2].set_title("Predicted")
+        axes[i, 2].axis("off")
+
+    plt.tight_layout()
+    plt.savefig(WORK / "validation_examples.png", dpi=300)
 
 
 # ============================================================================
