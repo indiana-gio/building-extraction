@@ -264,8 +264,8 @@ def compute_band_stats(records):
 
 def load_band_stats():
     stats = json.loads(STATS_PATH.read_text())
-    return (np.array(stats["means"], dtype=np.float64),
-            np.array(stats["stds"], dtype=np.float64))
+    return (np.array(stats["means"], dtype=np.float32),
+            np.array(stats["stds"], dtype=np.float32))
 
 
 # ============================================================================
@@ -403,6 +403,7 @@ def stage_train():
     (WORK / "history.json").write_text(json.dumps(history, indent=2))
     print("Best val IoU:", best_iou)
     plot_history(history)
+    save_random_validation_examples(model, records, band_means, band_stds)
 
 
 def plot_history(history):
@@ -470,6 +471,7 @@ def save_random_validation_examples(model, records, band_means, band_stds, num_e
 
     plt.tight_layout()
     plt.savefig(WORK / "validation_examples.png", dpi=300)
+
 
 
 # ============================================================================
