@@ -51,9 +51,9 @@ from tqdm import tqdm
 # ----------------------------------------------------------------------------
 CONFIG = {
     # ---- paths ----
-    "train_tiles_dir":  r"F:\UNet\Train",        # 36 GeoTIFFs, 5000x5000, 4 bands
+    "train_tiles_dir":  r"F:\UNet\Train1",        # 36 GeoTIFFs, 5000x5000, 4 bands
     "footprints_shp":   r"F:\UNet\Indy_Train_shapefile\IndyBuildingTrain.shp",
-    "infer_tiles_dir":  r"F:\UNet\Test",        # 10 GeoTIFFs for inference
+    "infer_tiles_dir":  r"F:\UNet\Test1",        # 10 GeoTIFFs for inference
     "work_dir":         r"F:\UNet\Result",                    # masks, chips, checkpoints, outputs
 
     # ---- data prep ----
