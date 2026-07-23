@@ -30,6 +30,7 @@ import json
 import random
 import argparse
 from pathlib import Path
+import pathlib
 
 import numpy as np
 import torch
@@ -568,7 +569,7 @@ def stage_infer():
     assert infer_tile_paths, f"No .tif tiles found in {CONFIG['infer_tiles_dir']}"
     print(f"{len(infer_tile_paths)} inference tiles")
 
-    
+    torch.serialization.add_safe_globals([pathlib.PosixPath])
     ckpt = torch.load(str(CKPT_BEST), map_location=DEVICE, weights_only= True)
     band_means = np.array(ckpt["band_means"], dtype=np.float32)
     band_stds = np.array(ckpt["band_stds"], dtype=np.float32)
