@@ -312,7 +312,7 @@ class BuildingDataset(Dataset):
 
 
 def build_model():
-    return smp.Unet(
+    return smp.DeepLabV3Plus(
         encoder_name=CONFIG["encoder"],
         encoder_weights=CONFIG["encoder_weights"],
         in_channels=CONFIG["in_channels"],
