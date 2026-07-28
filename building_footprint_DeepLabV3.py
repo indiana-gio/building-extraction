@@ -77,7 +77,7 @@ CONFIG = {
     "in_channels":      4,
 
     # ---- training ----
-    "epochs":           1,
+    "epochs":           20,
     "batch_size":       8,
     "lr":               1e-4,
     "weight_decay":     1e-4,
