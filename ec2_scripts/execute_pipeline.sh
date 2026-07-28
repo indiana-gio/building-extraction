@@ -2,7 +2,7 @@
 
 set -e
 
-mkdirs /opt/dlami/nvme/code 
+mkdir /opt/dlami/nvme/code 
 cd /opt/dlami/nvme/code
 
 echo "retrieve code"
