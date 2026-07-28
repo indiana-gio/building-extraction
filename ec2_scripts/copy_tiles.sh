@@ -10,7 +10,8 @@ if [ -z "$1" ]; then
     exit 2
 fi
 
+mkdir -p /opt/dlami/nvme/code/Project/TrainingTiles/3in
 while read line; do
-    aws s3 cp "s3://gisimageryingov/imageryoptimized/statewide/2025/SPE/03in/$line.tif" /opt/dlami/nvme/code/Project/TrainingTiles/3in
+    aws s3 cp "s3://gisimageryingov/imageryoptimized/statewide/2025/SPE/03in/$line.tif" "/opt/dlami/nvme/code/Project/TrainingTiles/3in/$line.tif"
 done < $1
 exit 0
