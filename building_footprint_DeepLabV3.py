@@ -55,10 +55,10 @@ ROOT_DIR = Path("/opt/dlami/nvme/code/Project")
 
 CONFIG = {
     # ---- paths ----
-    "train_tiles_dir":  ROOT_DIR / r"TrainingTiles/3in",        # 36 GeoTIFFs, 5000x5000, 4 bands
-    "footprints_shp":   ROOT_DIR / r"IndyMapShapefile/IndyBuildingTrain.shp",
+    "train_tiles_dir":  ROOT_DIR / r"TrainingTiles/3in",        # 1214 GeoTIFFs, 5000x5000, 4 bands
+    "footprints_shp":   ROOT_DIR / r"IndyMapShapefile/Building_Footprints.shp",
     "infer_tiles_dir":  ROOT_DIR / r"RawTiles10_3inch",        # 10 GeoTIFFs for inference
-    "work_dir":         ROOT_DIR / r"CustomModel/Results_3in",                     # masks, chips, checkpoints, outputs
+    "work_dir":         ROOT_DIR / r"CustomModel/Results_Large_Run",                     # masks, chips, checkpoints, outputs
 
     # ---- data prep ----
     "patch_size":       512,
@@ -72,7 +72,7 @@ CONFIG = {
     "band_stds":        None,
 
     # ---- model ----
-    "encoder":          "resnet34",   # try "resnet50" if you have GPU headroom
+    "encoder":          "resnet50",   # try "resnet50" if you have GPU headroom
     "encoder_weights":  "imagenet",   # smp adapts the first conv for 4 channels
     "in_channels":      4,
 
