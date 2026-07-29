@@ -1,0 +1,7 @@
+Model,Variant,Precision,Recall,F1,Mean IoU (matched),TP,FP,FN,N pred,N ref
+Blackshark.ai,Regularized,0.857,0.8878,0.8721,0.813,839,140,106,979,945
+Esri,Regularized,0.7797,0.7228,0.7501,0.7992,683,193,262,876,945
+U-Net34,Regularized,0.8573,0.782,0.8179,0.7983,739,123,206,862,945
+U-Net50,Regularized,0.8578,0.7852,0.8199,0.7993,742,123,203,865,945
+DeepLabV3Plus34,Regularized,0.862,0.7735,0.8154,0.7979,731,117,214,848,945
+DeepLabV3Plus50,Regularized,0.8777,0.8053,0.84,0.8012,761,106,184,867,945
