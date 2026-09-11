@@ -51,14 +51,14 @@ from tqdm import tqdm
 # Configuration
 # ----------------------------------------------------------------------------
 
-ROOT_DIR = Path("/opt/dlami/nvme/code/Project")
+ROOT_DIR = Path("/opt/dlami/nvme/code/project")
 
 CONFIG = {
     # ---- paths ----
     "train_tiles_dir":  ROOT_DIR / r"TrainingTiles/3in",        # 1214 GeoTIFFs, 5000x5000, 4 bands
     "footprints_shp":   ROOT_DIR / r"IndyMapShapefile/Building_Footprints.shp",
-    "infer_tiles_dir":  ROOT_DIR / r"RawTiles10_3inch",        # 10 GeoTIFFs for inference
-    "work_dir":         ROOT_DIR / r"CustomModel/Results_Large_Run",                     # masks, chips, checkpoints, outputs
+    "infer_tiles_dir":  ROOT_DIR / r"inference/tiles",        # 10 GeoTIFFs for inference
+    "work_dir":         ROOT_DIR / r"inference/weights",                     # masks, chips, checkpoints, outputs
 
     # ---- data prep ----
     "patch_size":       512,
