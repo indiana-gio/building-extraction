@@ -1,0 +1,18 @@
+services:
+  scratch-postgis:
+    name: scratch-postgis
+    image: postgis/postgis:18-3.6-alpine
+    volumes:
+      - scratch-postgis-data:/var/lib/postgresql
+    environment:
+      - POSTGRES_DB=scratch
+      - POSTGRES_USER=docker
+      - POSTGRES_PASS=docker
+      - POSTGRES_MULTIPLE_EXTENSIONS=postgis,pgrouting
+      - RUN_AS_ROOT=true
+    ports:
+      - 25432:5432
+    restart: on-failure
+
+volumes:
+  scratch-postgis-data:
