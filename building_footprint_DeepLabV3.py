@@ -534,11 +534,13 @@ def predict_tile(tile_path, model, band_means, band_stds):
         dst.write(pred, 1)
 
 
-def vectorize_predictions(infer_tile_paths):
+def vectorize_predictions(infer_tile_paths, out_crs = 3857):
+    import pandas as pd
     """Binary rasters -> polygons -> one combined GeoPackage."""
-    all_polys = []
+    all_polys = {}
     crs = None
     transform = None
+
     for tp in infer_tile_paths:
         stem = Path(tp).stem
         with rasterio.open(PRED_DIR / f"{stem}_pred.tif") as src:
@@ -550,14 +552,22 @@ def vectorize_predictions(infer_tile_paths):
             poly = shape(geom)
             if poly.area / px_area < CONFIG["min_building_px"]:
                 continue
-            all_polys.append({"geometry": poly, "tile": stem,
+            if crs not in all_polys.keys():
+                all_polys[crs] = {"geoms": [], "transform": transform}
+            all_polys[crs]["geoms"].append({"geometry": poly, "tile": stem,
                               "area_m2": round(poly.area, 1)})
 
     if not all_polys:
         print("No polygons produced - check threshold / model quality.")
         return
-    gdf_pred = gpd.GeoDataFrame(all_polys, crs=crs)
-    gdf_pred["geometry"] = gdf_pred.geometry.simplify(abs(transform.a) * 0.75)
+    gdfs = []
+    for crs, polys in all_polys.items():
+        gdf = gpd.GeoDataFrame(polys['geoms'], crs = crs)
+        gdf["geometry"] = gdf.geometry.simplify(polys['transform'].a * 0.75)
+        gdfs += [gdf.to_crs(out_crs)]
+    gdf_pred = gpd.GeoDataFrame(
+        pd.concat(gdfs), crs = out_crs
+    )
     out_gpkg = PRED_DIR / "predicted_footprints.gpkg"
     gdf_pred.to_file(out_gpkg, driver="GPKG")
     print(f"{len(gdf_pred)} predicted footprints -> {out_gpkg}")
