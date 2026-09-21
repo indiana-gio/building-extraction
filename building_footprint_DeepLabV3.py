@@ -540,7 +540,6 @@ def vectorize_predictions(infer_tile_paths, out_crs = 3857):
     all_polys = {}
     crs = None
     transform = None
-
     for tp in infer_tile_paths:
         stem = Path(tp).stem
         with rasterio.open(PRED_DIR / f"{stem}_pred.tif") as src:
@@ -556,7 +555,6 @@ def vectorize_predictions(infer_tile_paths, out_crs = 3857):
                 all_polys[crs] = {"geoms": [], "transform": transform}
             all_polys[crs]["geoms"].append({"geometry": poly, "tile": stem,
                               "area_m2": round(poly.area, 1)})
-
     if not all_polys:
         print("No polygons produced - check threshold / model quality.")
         return
