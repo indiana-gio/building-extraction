@@ -2,7 +2,6 @@
 
 # Don't forget to set to executable: sudo chown +x copy_tiles.sh
 set -e
-set -o pipefail
 set -u
 
 if [ -z "$1" ]; then 
@@ -16,7 +15,7 @@ if [ "$2" = "infer" ]; then
         aws s3 cp $line "/opt/dlami/nvme/code/project/inference/tiles/"
     done < $1
 fi
-if [ "$2" = "train" ]
+if [ "$2" = "train" ]; then
     mkdir -p /opt/dlami/nvme/code/project/training/tiles
     while read line; do 
         aws s3 cp $line "/opt/dlami/nvme/code/project/training/tiles/"
