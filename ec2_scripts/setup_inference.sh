@@ -13,8 +13,8 @@ time -p echo $(uv run python -c "import torch; print(torch.cuda.is_available())"
 
 cd ..
 
-sh ~/code/building-extraction/ec2_scripts/copy_tiles.sh ~/code/building-extraction/ec2_scripts/one-off.txt
-aws s3 cp s3://gsci-2026-building-footprint-057331986207-us-east-2-an/CustomModel/Results_Large_Run/checkpoints/best.pt project/inference/weights/checkpoints/
+sh ~/code/building-extraction/ec2_scripts/copy_tiles.sh ~/code/building-extraction/ec2_scripts/infer_test.txt infer
+aws s3 cp s3://gsci-2026-building-footprint-057331986207-us-east-2-an/retrain/checkpoints/best.pt project/inference/weights/checkpoints/
 
 mkdir -p /opt/dlami/nvme/code/project/inference/results
 
