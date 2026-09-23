@@ -19,10 +19,11 @@ cd ..
 #copy tile reference
 aws s3 cp s3://gsci-2026-building-footprint-057331986207-us-east-2-an/product/urls.csv ~/code/
 #slice tile list with given indices
-sh ~/code/building-extraction/ec2_scripts/parse_urls.sh ~/code/urls.csv $2 $3 > ~/code/building-extraction/ec2_scripts/infer_prod.txt
+/bin/bash ~/code/building-extraction/ec2_scripts/parse_urls.sh ~/code/urls.csv $2 $3 > ~/code/building-extraction/ec2_scripts/infer_prod.txt
 
+#copy tiles
 sh ~/code/building-extraction/ec2_scripts/copy_tiles.sh ~/code/building-extraction/ec2_scripts/infer_prod.txt infer
-aws s3 cp s3://gsci-2026-building-footprint-057331986207-us-east-2-an/retrain/checkpoints/best.pt project/results/checkpoints/
+aws s3 cp s3://gsci-2026-building-footprint-057331986207-us-east-2-an/re-train/checkpoints/best.pt project/results/checkpoints/
 
 mkdir -p /opt/dlami/nvme/code/project/inference/results
 
