@@ -64,7 +64,7 @@ CONFIG = {
     "patch_size":       512,
     "train_stride":     384,     # 512 - 384 = 128 px overlap between training chips
     "val_tile_frac":    0.17,    # ~6 of 36 tiles held out for validation (split by TILE)
-    "keep_empty_frac":  0.15,    # fraction of building-free patches kept as negatives
+    "keep_empty_frac":  0.1,    # fraction of building-free patches kept as negatives
 
     # ---- normalization ----
     # Set to lists of 4 floats to override; None = auto-compute from training chips
@@ -77,11 +77,11 @@ CONFIG = {
     "in_channels":      4,
 
     # ---- training ----
-    "epochs":           20,
-    "batch_size":       8,
+    "epochs":           30,
+    "batch_size":       32,
     "lr":               1e-4,
     "weight_decay":     1e-4,
-    "num_workers":      4,
+    "num_workers":      16,
     "amp":              True,
 
     # ---- inference ----
@@ -350,7 +350,7 @@ def stage_train():
     val_ds = BuildingDataset(records, "val", band_means, band_stds, augment=False)
     train_dl = DataLoader(train_ds, batch_size=CONFIG["batch_size"], shuffle=True,
                           num_workers=CONFIG["num_workers"], pin_memory=True,
-                          drop_last=True)
+                          drop_last=True, prefetch_factor=3)
     val_dl = DataLoader(val_ds, batch_size=CONFIG["batch_size"], shuffle=False,
                         num_workers=CONFIG["num_workers"], pin_memory=True)
     print(f"{len(train_ds)} train chips | {len(val_ds)} val chips")
