@@ -11,7 +11,7 @@ def load_and_slice(file, start, length):
 def write_urls(lst, path = Path(__file__).parent / 'production_infer.txt'):
     out_text = "\n".join(lst)
     with open(path, 'w') as f:
-        f.write(out_text)
+        f.write(out_text + "\n ")
     return path
 
 def main():
