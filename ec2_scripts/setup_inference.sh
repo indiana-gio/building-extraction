@@ -22,6 +22,8 @@ aws s3 cp s3://gsci-2026-building-footprint-057331986207-us-east-2-an/product/ur
 uv run ~/code/building-extraction/ec2_scripts/slice_tile_list.py ~/code/urls.csv $2 $3
 
 #copy tiles
+mkdir -p /opt/dlami/nvme/code/project/inference/tiles
+rm -R /opt/dlami/nvme/code/project/inference/tiles/
 sh ~/code/building-extraction/ec2_scripts/copy_tiles.sh ~/code/building-extraction/ec2_scripts/production_infer.txt infer
 aws s3 cp s3://gsci-2026-building-footprint-057331986207-us-east-2-an/re-train/checkpoints/best.pt project/results/checkpoints/
 
