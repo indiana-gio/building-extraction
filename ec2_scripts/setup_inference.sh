@@ -35,5 +35,3 @@ time -p uv run building_footprint_DeepLabV3.py infer
 cd ../project/results/predictions
 mv predicted_footprints.gpkg $1.gpkg
 aws s3 cp $1.gpkg s3://gsci-2026-building-footprint-057331986207-us-east-2-an/product/
-
-systemctl poweroff
